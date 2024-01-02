@@ -12,7 +12,7 @@ function LoginButton(props: LoginButtonProps) {
   const router = useRouter();
 
   function onClick() {
-    router.push("/auth/login");
+    router.push("/login");
   }
 
   if (props.mode === "modal") {
