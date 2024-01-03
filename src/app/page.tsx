@@ -7,22 +7,18 @@ import LoginButton from "@/components/auth/loginButton";
 
 export default function Home() {
   return (
-    <main className="flex h-full flex-col items-center justify-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-orange-300 to-orange-800">
-      <div className="space-y-6">
+    <main className="flex h-full flex-col items-center justify-center bg-neutral-900">
+      <div className="max-w-screen-md space-y-6 p-4 lg:max-w-screen-lg">
         <h1
           className={cn(
-            "flex items-center text-white drop-shadow-md",
+            "bg-gradient-to-r from-white/95 to-orange-100 bg-clip-text text-4xl font-semibold  text-transparent lg:text-6xl",
             GeistSans.className,
           )}
         >
-          <Lock className="mr-2 h-14 w-14" />{" "}
-          <span className="text-6xl font-semibold">Auth</span>
-        </h1>
-        <p className="text-lg text-white">
           A simple authentication system for Next.js
-        </p>
+        </h1>
         <LoginButton>
-          <Button variant="secondary" size="lg">
+          <Button variant="orange" size="lg">
             <LogIn className="mr-2 h-6 w-6" />
             Sign in
           </Button>

@@ -8,6 +8,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Social from "@/components/auth/social";
+import BackButton from "@/components/auth/backButton";
+import LoginSeparator from "@/components/auth/loginSeparator";
 
 interface CardWrapperProps {
   children: React.ReactNode;
@@ -21,14 +23,18 @@ function CardWrapper(props: CardWrapperProps) {
   return (
     <Card className="w-[400px] shadow-md">
       <CardHeader>
-        <CardTitle className="text-neutral-800">{props.headerLabel}</CardTitle>
+        <CardTitle>{props.headerLabel}</CardTitle>
       </CardHeader>
-      <CardContent>{props.children}</CardContent>
       {props.showSocial ? (
-        <CardFooter>
+        <CardHeader>
           <Social />
-        </CardFooter>
+        </CardHeader>
       ) : null}
+      <LoginSeparator />
+      <CardContent>{props.children}</CardContent>
+      <CardFooter>
+        <BackButton label={props.backButtonLabel} href={props.backButtonHref} />
+      </CardFooter>
     </Card>
   );
 }
