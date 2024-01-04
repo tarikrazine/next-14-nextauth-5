@@ -1,0 +1,13 @@
+{
+  "version": "5",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1704326557483,
+      "tag": "0000_chemical_jimmy_woo",
+      "breakpoints": true
+    }
+  ]
+}

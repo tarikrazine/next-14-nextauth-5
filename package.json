@@ -12,6 +12,7 @@
     "drizzle:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@auth/drizzle-adapter": "^0.3.12",
     "@hookform/resolvers": "^3.3.3",
     "@libsql/client": "^0.4.0-pre.5",
     "@radix-ui/react-label": "^2.0.2",
@@ -20,6 +21,7 @@
     "@t3-oss/env-nextjs": "^0.7.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "dotenv": "^16.3.1",
     "drizzle-orm": "^0.29.2",
     "geist": "^1.2.0",
     "libsql": "^0.2.0-pre.6",
