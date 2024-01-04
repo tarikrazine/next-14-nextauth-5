@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   integer,
   primaryKey,
@@ -5,12 +6,14 @@ import {
   text,
 } from "drizzle-orm/sqlite-core";
 import type { AdapterAccount } from "@auth/core/adapters";
+import { createId } from "@paralleldrive/cuid2";
 
 import { users } from "./users";
 
 export const accounts = sqliteTable(
   "account",
   {
+    id: text("id").notNull().$defaultFn(() => createId()),
     userId: text("userId")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
@@ -27,7 +30,14 @@ export const accounts = sqliteTable(
   },
   (account) => ({
     compoundKey: primaryKey({
-      columns: [account.provider, account.providerAccountId],
+      columns: [account.id, account.provider, account.providerAccountId],
     }),
   }),
 );
+
+export const accountsRelations = relations(accounts, ({ one }) => ({
+  user: one(users, {
+    fields: [accounts.userId],
+    references: [users.id],
+  }),
+}));

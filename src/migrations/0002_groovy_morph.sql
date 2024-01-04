@@ -1,0 +1,1 @@
+ALTER TABLE account ADD `id` text PRIMARY KEY NOT NULL;

@@ -7,7 +7,7 @@ export const env = createEnv({
     DATABASE_AUTH_TOKEN: z.string().min(1),
   },
   client: {
-    NEXT_PUBLIC_PUBLISHABLE_KEY: z.string().min(1),
+    //NEXT_PUBLIC_PUBLISHABLE_KEY: z.string().min(1),
   },
   // If you're using Next.js < 13.4.4, you'll need to specify the runtimeEnv manually
   //   runtimeEnv: {
@@ -19,6 +19,6 @@ export const env = createEnv({
   experimental__runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
     DATABASE_AUTH_TOKEN: process.env.DATABASE_AUTH_TOKEN,
-    NEXT_PUBLIC_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_PUBLISHABLE_KEY,
+    //NEXT_PUBLIC_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_PUBLISHABLE_KEY,
   },
 });
