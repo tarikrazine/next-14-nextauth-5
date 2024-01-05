@@ -15,7 +15,7 @@ export default function Home() {
             GeistSans.className,
           )}
         >
-          A simple authentication system for Next.js
+          Full authentication system for Next.js
         </h1>
         <LoginButton>
           <Button variant="secondary" size="lg">

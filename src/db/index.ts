@@ -5,6 +5,7 @@ import { env } from "../env.mjs";
 
 import * as usersSchema from "@/db/schema/users";
 import * as accountsSchema from "@/db/schema/accounts";
+import * as sessionsSchema from "@/db/schema/sessions";
 
 const client = createClient({
   url: env.DATABASE_URL,
@@ -15,5 +16,6 @@ export const db = drizzle(client, {
   schema: {
     ...usersSchema,
     ...accountsSchema,
+    ...sessionsSchema,
   },
 });

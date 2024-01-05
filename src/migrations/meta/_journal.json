@@ -57,6 +57,13 @@
       "when": 1704331002474,
       "tag": "0007_bumpy_slipstream",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1704402041045,
+      "tag": "0008_icy_loa",
+      "breakpoints": true
     }
   ]
 }

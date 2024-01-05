@@ -1,11 +1,10 @@
 "use server";
 
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 import { RegisterSchemaType, registerSchema } from "@/schema/registerSchema";
 import { db } from "@/db";
 import { users } from "@/db/schema/users";
-import { eq } from "drizzle-orm";
 import { getUserByEmail } from "@/lib/data";
 
 export async function register(values: RegisterSchemaType) {
