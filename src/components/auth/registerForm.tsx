@@ -2,6 +2,8 @@
 
 import { useState, useTransition } from "react";
 
+import { useSearchParams } from "next/navigation";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader, UserPlus } from "lucide-react";
@@ -26,6 +28,13 @@ import { register } from "@/actions/register";
 
 function RegisterForm() {
   const [isPending, startTransition] = useTransition();
+
+  const searchParams = useSearchParams();
+
+  const urlError =
+    searchParams.get("error") === "OAuthAccountNotLinked"
+      ? "Email not linked to account"
+      : "";
 
   const [success, setSuccess] = useState<string | undefined>("");
   const [error, setError] = useState<string | undefined>("");
@@ -117,7 +126,7 @@ function RegisterForm() {
             />
           </div>
           <FormSuccess message={success} />
-          <FormError message={error} />
+          <FormError message={error || urlError} />
           <Button
             type="submit"
             className="w-full"

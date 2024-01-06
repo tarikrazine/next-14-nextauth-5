@@ -2,6 +2,8 @@
 
 import { useState, useTransition } from "react";
 
+import { useSearchParams } from "next/navigation";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader, LogInIcon } from "lucide-react";
@@ -27,6 +29,13 @@ import { login } from "@/actions/login";
 function LoginPage() {
   const [isPending, startTransition] = useTransition();
 
+  const searchParams = useSearchParams();
+
+  const urlError =
+    searchParams.get("error") === "OAuthAccountNotLinked"
+      ? "Email not linked to account"
+      : "";
+
   const [success, setSuccess] = useState<string | undefined>("");
   const [error, setError] = useState<string | undefined>("");
 
@@ -43,9 +52,9 @@ function LoginPage() {
     setError("");
 
     startTransition(() => {
-      login(values).then((data: any) => {
-        setSuccess(data.success);
-        setError(data.error);
+      login(values).then((data) => {
+        setSuccess(data?.success);
+        setError(data?.error);
       });
     });
   }
@@ -98,7 +107,7 @@ function LoginPage() {
             />
           </div>
           <FormSuccess message={success} />
-          <FormError message={error} />
+          <FormError message={error || urlError} />
           <Button
             type="submit"
             className="w-full"

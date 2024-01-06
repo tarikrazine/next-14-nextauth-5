@@ -5,14 +5,29 @@ import Google from "next-auth/providers/google";
 import GitHub from "next-auth/providers/github";
 import Credentials from "next-auth/providers/credentials";
 
+import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 
 import { db } from "@/db";
+import { users } from "@/db/schema/users";
+
 import { loginSchema } from "@/schema/loginSchema";
 import { getUserByEmail, getUserById } from "./data";
 import { env } from "@/env.mjs";
 
 export const { handlers: { GET, POST }, auth, signIn, signOut } = NextAuth({
+  pages: {
+    error: "/error",
+    signIn: "/login",
+  },
+  events: {
+    async linkAccount({ user, account }) {
+      console.log("[PROVIDER: ]", account.provider);
+      await db.update(users).set({ emailVerified: new Date() }).where(
+        eq(users.id, user.id),
+      );
+    },
+  },
   callbacks: {
     async jwt({ token }) {
       if (!token.sub) return token;

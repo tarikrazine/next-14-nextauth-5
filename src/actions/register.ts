@@ -2,10 +2,11 @@
 
 import bcrypt from "bcryptjs";
 
-import { RegisterSchemaType, registerSchema } from "@/schema/registerSchema";
+import { registerSchema, RegisterSchemaType } from "@/schema/registerSchema";
 import { db } from "@/db";
 import { users } from "@/db/schema/users";
 import { getUserByEmail } from "@/lib/data";
+import { generateVerificationToken } from "@/lib/tokens";
 
 export async function register(values: RegisterSchemaType) {
   const validatedFields = registerSchema.safeParse(values);
@@ -28,13 +29,15 @@ export async function register(values: RegisterSchemaType) {
     };
   }
 
-  await db.insert(users).values({
+  const [newUser] = await db.insert(users).values({
     name,
     email,
     password: hashedPassword,
-  });
+  }).returning();
+
+  const verificationToken = await generateVerificationToken(newUser.email);
 
   return {
-    success: "Email sent!",
+    success: "Confirmation email sent!",
   };
 }

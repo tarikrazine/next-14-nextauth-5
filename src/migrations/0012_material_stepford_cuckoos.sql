@@ -1,0 +1,1 @@
+DROP INDEX IF EXISTS `verificationToken_token_unique`;
