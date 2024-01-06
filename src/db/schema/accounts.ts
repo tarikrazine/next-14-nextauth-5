@@ -13,7 +13,6 @@ import { users } from "./users";
 export const accounts = sqliteTable(
   "account",
   {
-    id: text("id").notNull().$defaultFn(() => createId()),
     userId: text("userId")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
@@ -30,7 +29,7 @@ export const accounts = sqliteTable(
   },
   (account) => ({
     compoundKey: primaryKey({
-      columns: [account.id, account.provider, account.providerAccountId],
+      columns: [account.provider, account.providerAccountId],
     }),
   }),
 );

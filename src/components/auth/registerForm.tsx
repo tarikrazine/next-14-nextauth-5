@@ -44,7 +44,6 @@ function RegisterForm() {
     setError("");
 
     startTransition(() => {
-      console.log(isPending);
       register(values).then((data) => {
         setSuccess(data.success);
         setError(data.error);

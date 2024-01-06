@@ -43,7 +43,7 @@ function LoginPage() {
     setError("");
 
     startTransition(() => {
-      login(values).then((data) => {
+      login(values).then((data: any) => {
         setSuccess(data.success);
         setError(data.error);
       });

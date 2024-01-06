@@ -7,7 +7,7 @@ import {
   publicRoutes,
 } from "./lib/routes";
 
-export const runtime = "experimental-edge";
+//export const runtime = "experimental-edge";
 
 export default auth(async (request) => {
   const { nextUrl } = request;

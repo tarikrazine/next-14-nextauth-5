@@ -4,7 +4,7 @@ import { AuthError } from "next-auth";
 
 import { signIn } from "@/lib/auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/lib/routes";
-import { LoginSchemaType, loginSchema } from "@/schema/loginSchema";
+import { loginSchema, LoginSchemaType } from "@/schema/loginSchema";
 
 export async function login(values: LoginSchemaType) {
   const validatedFields = loginSchema.safeParse(values);
