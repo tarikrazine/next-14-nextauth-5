@@ -1,6 +1,8 @@
 "use server";
 
 import { getUserByEmail } from "@/lib/data";
+import { sendPasswordResetEmail } from "@/lib/mail";
+import { generatePasswordResetToken } from "@/lib/tokens";
 import {
   resetPasswordSchema,
   ResetPasswordType,
@@ -24,6 +26,16 @@ export async function resetPassword(values: ResetPasswordType) {
       error: "Email not found!",
     };
   }
+
+  const passwordResetToken = await generatePasswordResetToken(
+    existingUser.email,
+  );
+
+  await sendPasswordResetEmail({
+    token: passwordResetToken.token,
+    email: existingUser.email,
+    name: existingUser.name || "",
+  });
 
   return {
     success: "Password reset email sent",

@@ -6,6 +6,29 @@ import { env } from "@/env.mjs";
 
 const resend = new Resend(env.RESEND_API_KEY);
 
+export async function sendPasswordResetEmail(
+  { name = "John Doe", email, token }: {
+    name: string;
+    email: string;
+    token: string;
+  },
+) {
+  const confirmLink = `http://localhost:3000/new-password?token=${token}`;
+
+  try {
+    const data = await resend.emails.send({
+      from: "AuthNext <onboarding@resend.dev>",
+      to: ["ra.devweb.io@gmail.com"],
+      subject: "Reset your password",
+      react: EmailTemplate({ name, confirmLink }),
+    });
+
+    return Response.json(data);
+  } catch (error) {
+    return Response.json({ error });
+  }
+}
+
 export async function sendVerificationEmail(
   { name = "John Doe", email, token }: {
     name: string;
