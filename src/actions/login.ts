@@ -10,6 +10,7 @@ import { users } from "@/db/schema/users";
 import { eq } from "drizzle-orm";
 import { generateVerificationToken } from "@/lib/tokens";
 import { getUserByEmail } from "@/lib/data";
+import { sendVerificationEmail } from "@/lib/mail";
 
 export async function login(values: LoginSchemaType) {
   const validatedFields = loginSchema.safeParse(values);
@@ -34,6 +35,12 @@ export async function login(values: LoginSchemaType) {
     const verificationToken = await generateVerificationToken(
       existingUser.email,
     );
+
+    await sendVerificationEmail({
+      name: existingUser.name || "",
+      email: existingUser.email,
+      token: verificationToken.token,
+    });
 
     return { success: "Email not verified, please check your email" };
   }

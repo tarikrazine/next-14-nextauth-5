@@ -17,6 +17,7 @@ interface CardWrapperProps {
   backButtonLabel: string;
   backButtonHref: string;
   showSocial?: boolean;
+  separator?: boolean;
 }
 
 function CardWrapper(props: CardWrapperProps) {
@@ -30,7 +31,7 @@ function CardWrapper(props: CardWrapperProps) {
           <Social />
         </CardHeader>
       ) : null}
-      <LoginSeparator />
+      {props.separator ? <LoginSeparator /> : null}
       <CardContent>{props.children}</CardContent>
       <CardFooter>
         <BackButton label={props.backButtonLabel} href={props.backButtonHref} />

@@ -22,13 +22,24 @@ export const { handlers: { GET, POST }, auth, signIn, signOut } = NextAuth({
   },
   events: {
     async linkAccount({ user, account }) {
-      console.log("[PROVIDER: ]", account.provider);
+      console.log("[PROVIDER: ]", account?.provider);
       await db.update(users).set({ emailVerified: new Date() }).where(
         eq(users.id, user.id),
       );
     },
   },
   callbacks: {
+    async signIn({ user, account }) {
+      if (account?.provider !== "credentials") return true;
+
+      const existingUser = await getUserById(user.id);
+
+      if (!existingUser?.emailVerified) {
+        return false;
+      }
+
+      return true;
+    },
     async jwt({ token }) {
       if (!token.sub) return token;
 

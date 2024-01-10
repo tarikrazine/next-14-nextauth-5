@@ -2,12 +2,9 @@
 
 import { useState, useTransition } from "react";
 
-import { useSearchParams } from "next/navigation";
-import Link from "next/link";
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader, LogInIcon } from "lucide-react";
+import { Loader } from "lucide-react";
 
 import {
   Form,
@@ -21,39 +18,34 @@ import { Input } from "@/components/ui/input";
 import CardWrapper from "@/components/auth/cardWrapper";
 import { Button } from "@/components/ui/button";
 
-import { LoginSchemaType, loginSchema } from "@/schema/loginSchema";
-
 import FormError from "@/components/formError";
 import FormSuccess from "@/components/formSuccess";
-import { login } from "@/actions/login";
 
-function LoginPage() {
+import {
+  resetPasswordSchema,
+  ResetPasswordType,
+} from "@/schema/resetPasswordSchema";
+import { resetPassword } from "@/actions/resetPassword";
+
+function ForgotPassword() {
   const [isPending, startTransition] = useTransition();
-
-  const searchParams = useSearchParams();
-
-  const urlError =
-    searchParams.get("error") === "OAuthAccountNotLinked"
-      ? "Email not linked to account"
-      : "";
 
   const [success, setSuccess] = useState<string | undefined>("");
   const [error, setError] = useState<string | undefined>("");
 
-  const form = useForm<LoginSchemaType>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<ResetPasswordType>({
+    resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
       email: "",
-      password: "",
     },
   });
 
-  function onSubmit(values: LoginSchemaType) {
+  function onSubmit(values: ResetPasswordType) {
     setSuccess("");
     setError("");
 
     startTransition(() => {
-      login(values).then((data) => {
+      resetPassword(values).then((data) => {
         setSuccess(data?.success);
         setError(data?.error);
       });
@@ -62,10 +54,9 @@ function LoginPage() {
 
   return (
     <CardWrapper
-      headerLabel="Welcome back"
-      backButtonLabel="Don't have an account?"
-      backButtonHref="/register"
-      showSocial
+      headerLabel="Forgot your password?"
+      backButtonLabel="Back to login"
+      backButtonHref="/login"
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -88,35 +79,9 @@ function LoginPage() {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="********"
-                      disabled={isPending}
-                      {...field}
-                    />
-                  </FormControl>
-                  <Button
-                    variant="link"
-                    size="sm"
-                    asChild
-                    className="px-0 font-normal"
-                  >
-                    <Link href="/forgot-password">Forgot password?</Link>
-                  </Button>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
           </div>
           <FormSuccess message={success} />
-          <FormError message={error || urlError} />
+          <FormError message={error} />
           <Button
             type="submit"
             className="w-full"
@@ -124,12 +89,10 @@ function LoginPage() {
             size="lg"
             disabled={isPending}
           >
-            {!isPending ? (
-              <LogInIcon className="mr-2 h-6 w-6" />
-            ) : (
+            {isPending ? (
               <Loader className="mr-2 h-6 w-6 animate-spin" />
-            )}
-            Sign in
+            ) : null}
+            Send reset email
           </Button>
         </form>
       </Form>
@@ -137,4 +100,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default ForgotPassword;

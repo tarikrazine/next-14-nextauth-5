@@ -9,7 +9,7 @@ interface BackButtonProps {
 
 function BackButton(props: BackButtonProps) {
   return (
-    <Button variant="link" className="font-normal" size="sm" asChild>
+    <Button variant="link" className="px-0 font-normal" size="sm" asChild>
       <Link href={props.href}>{props.label}</Link>
     </Button>
   );
