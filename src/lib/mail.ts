@@ -6,8 +6,29 @@ import { env } from "@/env.mjs";
 
 const resend = new Resend(env.RESEND_API_KEY);
 
+export async function sendTwoFactorAuthTokenEmail(
+  { name, email, token }: {
+    name: string;
+    email: string;
+    token: string;
+  },
+) {
+  try {
+    const data = await resend.emails.send({
+      from: "AuthNext <onboarding@resend.dev>",
+      to: ["ra.devweb.io@gmail.com"],
+      subject: "2FA code",
+      react: EmailTemplate({ name, token }),
+    });
+
+    return Response.json(data);
+  } catch (error) {
+    return Response.json({ error });
+  }
+}
+
 export async function sendPasswordResetEmail(
-  { name = "John Doe", email, token }: {
+  { name, email, token }: {
     name: string;
     email: string;
     token: string;
@@ -30,7 +51,7 @@ export async function sendPasswordResetEmail(
 }
 
 export async function sendVerificationEmail(
-  { name = "John Doe", email, token }: {
+  { name, email, token }: {
     name: string;
     email: string;
     token: string;

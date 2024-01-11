@@ -6,13 +6,13 @@ import {
 } from "drizzle-orm/sqlite-core";
 import { createId } from "@paralleldrive/cuid2";
 
-export const passwordResetToken = sqliteTable("password_reset_token", {
+export const twoFactorToken = sqliteTable("two_factor_token", {
   id: text("id").$default(() => createId()).notNull(),
   email: text("email").notNull(),
   token: text("token").notNull(),
   expires: integer("expires", { mode: "timestamp_ms" }).notNull(),
-}, (passwordResetToken) => ({
+}, (twoFactorToken) => ({
   compoundKey: primaryKey({
-    columns: [passwordResetToken.email, passwordResetToken.token],
+    columns: [twoFactorToken.email, twoFactorToken.token],
   }),
 }));

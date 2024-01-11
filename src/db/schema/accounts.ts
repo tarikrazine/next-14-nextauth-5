@@ -6,7 +6,6 @@ import {
   text,
 } from "drizzle-orm/sqlite-core";
 import type { AdapterAccount } from "@auth/core/adapters";
-import { createId } from "@paralleldrive/cuid2";
 
 import { users } from "./users";
 

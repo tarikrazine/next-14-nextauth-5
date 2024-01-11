@@ -6,7 +6,7 @@ import {
 } from "drizzle-orm/sqlite-core";
 import { createId } from "@paralleldrive/cuid2";
 
-export const verificationToken = sqliteTable("verificationToken", {
+export const verificationToken = sqliteTable("verification_token", {
   id: text("id").$default(() => createId()).notNull(),
   email: text("email").notNull(),
   token: text("token").notNull(),

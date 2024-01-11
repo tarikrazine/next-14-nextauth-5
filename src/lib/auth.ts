@@ -14,6 +14,8 @@ import { users } from "@/db/schema/users";
 import { loginSchema } from "@/schema/loginSchema";
 import { getUserByEmail, getUserById } from "./data";
 import { env } from "@/env.mjs";
+import { getTwoFactorAuthConfirmationById } from "./twoFactorAuthConfirmation";
+import { twoFactorAuth } from "@/db/schema/twoFactorAuth";
 
 export const { handlers: { GET, POST }, auth, signIn, signOut } = NextAuth({
   pages: {
@@ -36,6 +38,19 @@ export const { handlers: { GET, POST }, auth, signIn, signOut } = NextAuth({
 
       if (!existingUser?.emailVerified) {
         return false;
+      }
+
+      if (existingUser.isTwoFactorEnabled) {
+        const twoFactorAuthConfirmation =
+          await getTwoFactorAuthConfirmationById(existingUser.id);
+
+        if (!twoFactorAuthConfirmation) {
+          return false;
+        }
+
+        await db.delete(twoFactorAuth).where(
+          eq(twoFactorAuth.id, twoFactorAuthConfirmation.id),
+        );
       }
 
       return true;

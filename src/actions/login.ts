@@ -1,16 +1,22 @@
 "use server";
 
 import { AuthError } from "next-auth";
+import { eq } from "drizzle-orm";
 
 import { signIn } from "@/lib/auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/lib/routes";
 import { loginSchema, LoginSchemaType } from "@/schema/loginSchema";
 import { db } from "@/db";
-import { users } from "@/db/schema/users";
-import { eq } from "drizzle-orm";
-import { generateVerificationToken } from "@/lib/tokens";
+import {
+  generateTwoFactorAuthToken,
+  generateVerificationToken,
+} from "@/lib/tokens";
 import { getUserByEmail } from "@/lib/data";
-import { sendVerificationEmail } from "@/lib/mail";
+import { sendTwoFactorAuthTokenEmail, sendVerificationEmail } from "@/lib/mail";
+import { getTwoFactorTokenByEmail } from "@/lib/twoFactorToken";
+import { twoFactorAuth } from "@/db/schema/twoFactorAuth";
+import { twoFactorToken } from "@/db/schema/twoFactorToken";
+import { getTwoFactorAuthConfirmationById } from "@/lib/twoFactorAuthConfirmation";
 
 export async function login(values: LoginSchemaType) {
   const validatedFields = loginSchema.safeParse(values);
@@ -21,7 +27,7 @@ export async function login(values: LoginSchemaType) {
     };
   }
 
-  const { email, password } = validatedFields.data;
+  const { email, password, code } = validatedFields.data;
 
   const existingUser = await getUserByEmail(email);
 
@@ -43,6 +49,56 @@ export async function login(values: LoginSchemaType) {
     });
 
     return { success: "Email not verified, please check your email" };
+  }
+
+  if (existingUser.isTwoFactorEnabled && existingUser.email) {
+    if (code) {
+      const twoFactorAuthToken = await getTwoFactorTokenByEmail(
+        existingUser.email,
+      );
+
+      if (!twoFactorAuthToken) {
+        return { error: "Invalid Two factor token!" };
+      }
+
+      if (twoFactorAuthToken.token !== code) {
+        return { error: "Invalid Two factor token!" };
+      }
+
+      const hasExpired = twoFactorAuthToken.expires < new Date();
+
+      if (hasExpired) {
+        return { error: "Two factor token has expired!" };
+      }
+
+      await db.delete(twoFactorToken).where(
+        eq(twoFactorToken.id, twoFactorAuthToken.id),
+      );
+
+      const existingConfirmation = await getTwoFactorAuthConfirmationById(
+        existingUser.id,
+      );
+
+      if (existingConfirmation) {
+        await db.delete(twoFactorAuth).where(
+          eq(twoFactorAuth.id, existingConfirmation.id),
+        );
+      }
+
+      await db.insert(twoFactorAuth).values({ userId: existingUser.id });
+    } else {
+      const twoFactorAuthToken = await generateTwoFactorAuthToken(
+        existingUser.email,
+      );
+
+      await sendTwoFactorAuthTokenEmail({
+        name: existingUser.name || "",
+        email: existingUser.email,
+        token: twoFactorAuthToken.token,
+      });
+
+      return { twoFactor: true };
+    }
   }
 
   try {

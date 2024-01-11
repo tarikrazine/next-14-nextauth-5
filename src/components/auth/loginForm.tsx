@@ -39,6 +39,7 @@ function LoginPage() {
 
   const [success, setSuccess] = useState<string | undefined>("");
   const [error, setError] = useState<string | undefined>("");
+  const [showTwoFactor, setShowTwoFactor] = useState<boolean>(false);
 
   const form = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
@@ -53,10 +54,25 @@ function LoginPage() {
     setError("");
 
     startTransition(() => {
-      login(values).then((data) => {
-        setSuccess(data?.success);
-        setError(data?.error);
-      });
+      login(values)
+        .then((data) => {
+          if (data?.error) {
+            form.reset();
+            setError(data?.error);
+          }
+
+          if (data?.success) {
+            form.reset();
+            setSuccess(data?.success);
+          }
+
+          if (data?.twoFactor) {
+            setShowTwoFactor(true);
+          }
+        })
+        .catch(() => {
+          setError("Something went wrong");
+        });
     });
   }
 
@@ -70,50 +86,76 @@ function LoginPage() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-4">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="email"
-                      placeholder="johndoe@example.com"
-                      disabled={isPending}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="********"
-                      disabled={isPending}
-                      {...field}
-                    />
-                  </FormControl>
-                  <Button
-                    variant="link"
-                    size="sm"
-                    asChild
-                    className="px-0 font-normal"
-                  >
-                    <Link href="/forgot-password">Forgot password?</Link>
-                  </Button>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {showTwoFactor ? (
+              <>
+                <FormField
+                  control={form.control}
+                  name="code"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Two factor code</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="123456"
+                          disabled={isPending}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </>
+            ) : null}
+            {!showTwoFactor ? (
+              <>
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          placeholder="johndoe@example.com"
+                          disabled={isPending}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="password"
+                          placeholder="********"
+                          disabled={isPending}
+                          {...field}
+                        />
+                      </FormControl>
+                      <Button
+                        variant="link"
+                        size="sm"
+                        asChild
+                        className="px-0 font-normal"
+                      >
+                        <Link href="/forgot-password">Forgot password?</Link>
+                      </Button>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </>
+            ) : null}
           </div>
           <FormSuccess message={success} />
           <FormError message={error || urlError} />
@@ -129,7 +171,7 @@ function LoginPage() {
             ) : (
               <Loader className="mr-2 h-6 w-6 animate-spin" />
             )}
-            Sign in
+            {showTwoFactor ? "Confirm" : "Sign in"}
           </Button>
         </form>
       </Form>
