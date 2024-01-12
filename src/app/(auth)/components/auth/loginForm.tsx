@@ -18,7 +18,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import CardWrapper from "@/components/auth/cardWrapper";
+import CardWrapper from "@/app/(auth)/components/auth/cardWrapper";
 import { Button } from "@/components/ui/button";
 
 import { LoginSchemaType, loginSchema } from "@/schema/loginSchema";

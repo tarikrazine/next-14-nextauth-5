@@ -5,7 +5,12 @@ export default function DashboardLayout({
 }) {
   return (
     <>
-      <main>{children}</main>
+      <main className="px-6">
+        <div className="flex gap-x-4">
+          <div className="hidden w-40 shrink-0 md:block">Side navbar</div>
+          {children}
+        </div>
+      </main>
     </>
   );
 }

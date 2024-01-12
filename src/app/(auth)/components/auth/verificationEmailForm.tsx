@@ -8,8 +8,8 @@ import { Loader2 } from "lucide-react";
 
 import CardWrapper from "./cardWrapper";
 import { newVerification } from "@/actions/verifyEmail";
-import FormError from "../formError";
-import FormSuccess from "../formSuccess";
+import FormError from "../../../../components/formError";
+import FormSuccess from "../../../../components/formSuccess";
 
 function VerificationEmailForm() {
   const [error, setError] = useState<string | undefined>("");

@@ -1,4 +1,4 @@
-import VerificationEmailForm from "@/components/auth/verificationEmailForm";
+import VerificationEmailForm from "@/app/(auth)/components/auth/verificationEmailForm";
 
 export default async function NewVerificationPage() {
   return <VerificationEmailForm />;

@@ -7,9 +7,9 @@ import {
   CardFooter,
   CardTitle,
 } from "@/components/ui/card";
-import Social from "@/components/auth/social";
-import BackButton from "@/components/auth/backButton";
-import LoginSeparator from "@/components/auth/loginSeparator";
+import Social from "@/app/(auth)/components/auth/social";
+import BackButton from "@/app/(auth)/components/auth/backButton";
+import LoginSeparator from "@/app/(auth)/components/auth/loginSeparator";
 
 interface CardWrapperProps {
   children: React.ReactNode;

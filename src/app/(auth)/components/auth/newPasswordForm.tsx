@@ -2,10 +2,15 @@
 
 import { useState, useTransition } from "react";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
+import { Loader2 } from "lucide-react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+
+import CardWrapper from "./cardWrapper";
+import FormSuccess from "../../../../components/formSuccess";
+import FormError from "../../../../components/formError";
 import {
   Form,
   FormControl,
@@ -15,37 +20,36 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import CardWrapper from "@/components/auth/cardWrapper";
 import { Button } from "@/components/ui/button";
 
-import FormError from "@/components/formError";
-import FormSuccess from "@/components/formSuccess";
-
 import {
-  resetPasswordSchema,
-  ResetPasswordType,
-} from "@/schema/resetPasswordSchema";
-import { resetPassword } from "@/actions/resetPassword";
+  NewPasswordSchemaType,
+  newPasswordSchema,
+} from "@/schema/newPasswordSchema";
+import { newPassword } from "@/actions/newPassword";
 
-function ForgotPassword() {
+function NewPasswordForm() {
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
+
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
+
   const [isPending, startTransition] = useTransition();
 
-  const [success, setSuccess] = useState<string | undefined>("");
-  const [error, setError] = useState<string | undefined>("");
-
-  const form = useForm<ResetPasswordType>({
-    resolver: zodResolver(resetPasswordSchema),
+  const form = useForm<NewPasswordSchemaType>({
+    resolver: zodResolver(newPasswordSchema),
     defaultValues: {
-      email: "",
+      password: "",
     },
   });
 
-  function onSubmit(values: ResetPasswordType) {
+  function onSubmit(values: NewPasswordSchemaType) {
     setSuccess("");
     setError("");
 
     startTransition(() => {
-      resetPassword(values).then((data) => {
+      newPassword(values, token).then((data) => {
         setSuccess(data?.success);
         setError(data?.error);
       });
@@ -54,7 +58,7 @@ function ForgotPassword() {
 
   return (
     <CardWrapper
-      headerLabel="Forgot your password?"
+      headerLabel="Enter a new password"
       backButtonLabel="Back to login"
       backButtonHref="/login"
     >
@@ -63,14 +67,14 @@ function ForgotPassword() {
           <div className="space-y-4">
             <FormField
               control={form.control}
-              name="email"
+              name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>New password</FormLabel>
                   <FormControl>
                     <Input
-                      type="email"
-                      placeholder="johndoe@example.com"
+                      type="password"
+                      placeholder="********"
                       disabled={isPending}
                       {...field}
                     />
@@ -90,9 +94,9 @@ function ForgotPassword() {
             disabled={isPending}
           >
             {isPending ? (
-              <Loader className="mr-2 h-6 w-6 animate-spin" />
+              <Loader2 className="mr-2 h-6 w-6 animate-spin" />
             ) : null}
-            Send reset email
+            Reset your password
           </Button>
         </form>
       </Form>
@@ -100,4 +104,4 @@ function ForgotPassword() {
   );
 }
 
-export default ForgotPassword;
+export default NewPasswordForm;

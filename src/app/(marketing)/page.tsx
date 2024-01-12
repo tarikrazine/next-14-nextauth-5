@@ -3,7 +3,7 @@ import { GeistSans } from "geist/font/sans";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import LoginButton from "@/components/auth/loginButton";
+import LoginButton from "@/app/(auth)/components/auth/loginButton";
 
 export default function Home() {
   return (
