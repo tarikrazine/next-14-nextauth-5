@@ -10,7 +10,7 @@ function FormSuccess(props: FormSuccessProps) {
   return (
     <div
       className="flex items-center gap-x-2 rounded-md bg-emerald-700/15
-    p-3 text-sm text-emerald-700"
+    p-3 text-sm text-emerald-700 dark:bg-emerald-400 dark:text-emerald-900"
     >
       <FaCheckCircle className="h-4 w-4" />
       {props.message}

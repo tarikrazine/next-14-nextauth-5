@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { GeistMono } from "geist/font/mono";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 
 import "./globals.css";
 
@@ -15,8 +16,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={`${GeistMono.className}`}>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${GeistMono.className}`}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
