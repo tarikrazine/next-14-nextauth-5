@@ -1,3 +1,3 @@
 export default function SettingsPage() {
-  return <div>Settings</div>;
+  return <div className="h-full p-4">Settings</div>;
 }

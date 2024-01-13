@@ -7,4 +7,5 @@ export const authRoutes = [
   "/new-password",
 ];
 export const apiAuthPrefix = "/api/auth";
+export const dashboardForbiddenRoutes = ["/dashboard"];
 export const DEFAULT_LOGIN_REDIRECT = "/dashboard/settings";

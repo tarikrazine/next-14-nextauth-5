@@ -8,10 +8,10 @@ export default function DashboardLayout({
   return (
     <main className="h-full">
       <div className="flex h-full gap-x-4">
-        <div className="hidden w-40 shrink-0 md:block">
+        <div className="w-50 hidden shrink-0 md:block">
           <SideBar />
         </div>
-        {children}
+        <div className="w-full">{children}</div>
       </div>
     </main>
   );

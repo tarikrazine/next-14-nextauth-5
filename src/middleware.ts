@@ -3,6 +3,7 @@ import { auth } from "./lib/auth";
 import {
   apiAuthPrefix,
   authRoutes,
+  dashboardForbiddenRoutes,
   DEFAULT_LOGIN_REDIRECT,
   publicRoutes,
 } from "./lib/routes";
@@ -16,6 +17,7 @@ export default auth(async (request) => {
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+  const isDashboard = dashboardForbiddenRoutes.includes(nextUrl.pathname);
 
   if (isApiAuthRoute) {
     return null;
@@ -37,7 +39,11 @@ export default auth(async (request) => {
     );
   }
 
-  return null;
+  if (isDashboard && isLoggedIn) {
+    return NextResponse.redirect(
+      new URL("/dashboard/settings", nextUrl),
+    );
+  }
 });
 
 export const config = {

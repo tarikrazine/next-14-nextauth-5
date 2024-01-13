@@ -22,7 +22,7 @@ interface CardWrapperProps {
 
 function CardWrapper(props: CardWrapperProps) {
   return (
-    <Card className="w-[400px] border-2 border-black shadow-md dark:border-white">
+    <Card className="w-[400px] border-2 border-black bg-transparent shadow-md dark:border-white">
       <CardHeader>
         <CardTitle>{props.headerLabel}</CardTitle>
       </CardHeader>
