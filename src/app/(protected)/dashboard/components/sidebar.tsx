@@ -4,7 +4,6 @@ import { usePathname, useRouter } from "next/navigation";
 
 import { CreditCard, Settings } from "lucide-react";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import UserAvatar from "./userAvatar";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
@@ -25,7 +24,7 @@ function Sidebar() {
     {
       label: "Billing",
       icon: <CreditCard className="mr-2 h-4 w-4" />,
-      href: ``,
+      href: `/dashboard/billing`,
     },
     {
       label: "Settings",
@@ -46,13 +45,8 @@ function Sidebar() {
             key={route.label}
             size="default"
             onClick={() => onClick(route.href)}
-            className={cn(
-              "mb-1 w-full justify-start font-normal ",
-              pathname === route.href
-                ? "bg-primary text-slate-50 dark:bg-slate-50 dark:text-slate-900"
-                : null,
-            )}
-            variant="outline"
+            className="mb-1 w-full justify-start font-normal"
+            variant={pathname === route.href ? "outline" : "ghost"}
           >
             {route.icon}
             {route.label}
