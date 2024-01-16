@@ -1,8 +1,9 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 
-import { CreditCard, Settings } from "lucide-react";
+import { CreditCard, LogOut, Settings } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import UserAvatar from "./userAvatar";
@@ -13,9 +14,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { signOut } from "next-auth/react";
 
 function Sidebar() {
-  const router = useRouter();
   const pathname = usePathname();
 
   const user = useCurrentUser();
@@ -33,27 +34,25 @@ function Sidebar() {
     },
   ];
 
-  function onClick(href: string) {
-    router.push(href);
-  }
-
   return (
-    <div className="flex h-full flex-col p-2.5">
+    <div className="flex h-full flex-col p-2.5 pt-5">
       <div className="flex flex-1 flex-col space-y-2">
         {routes.map((route) => (
           <Button
             key={route.label}
             size="default"
-            onClick={() => onClick(route.href)}
             className="mb-1 w-full justify-start font-normal"
-            variant={pathname === route.href ? "outline" : "ghost"}
+            variant={pathname === route.href ? "default" : "ghost"}
+            asChild
           >
-            {route.icon}
-            {route.label}
+            <Link href={route.href}>
+              {route.icon}
+              {route.label}
+            </Link>
           </Button>
         ))}
       </div>
-      <div className="flex w-full items-center space-x-2 rounded-md  p-1 text-primary">
+      <div className="flex w-full items-center justify-between space-x-2 rounded-md p-1 text-primary">
         <UserAvatar name={user?.name} src={user?.image} />
         <TooltipProvider>
           <Tooltip>
@@ -68,6 +67,15 @@ function Sidebar() {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="bg-transparent"
+          aria-label="Sign out"
+          onClick={() => signOut()}
+        >
+          <LogOut className="h-5 w-5" />
+        </Button>
       </div>
     </div>
   );

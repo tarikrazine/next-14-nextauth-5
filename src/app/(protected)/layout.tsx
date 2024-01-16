@@ -14,7 +14,7 @@ export default async function ProtectedLayout({
     <SessionProvider session={session}>
       <div className="flex h-full flex-col bg-slate-50 dark:bg-[#1F1F1F]">
         <Navbar />
-        <div className="flex-1">{children}</div>
+        <div className="flex-1 pt-14">{children}</div>
         {/* <div className="flex h-14 items-center px-6">Footer</div> */}
       </div>
     </SessionProvider>
