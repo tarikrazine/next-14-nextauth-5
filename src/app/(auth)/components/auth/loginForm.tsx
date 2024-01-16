@@ -21,7 +21,7 @@ import { Input } from "@/components/ui/input";
 import CardWrapper from "@/app/(auth)/components/auth/cardWrapper";
 import { Button } from "@/components/ui/button";
 
-import { LoginSchemaType, loginSchema } from "@/schema/loginSchema";
+import { LoginSchemaType, loginSchema } from "@/schema/login.schema";
 
 import FormError from "@/components/formError";
 import FormSuccess from "@/components/formSuccess";

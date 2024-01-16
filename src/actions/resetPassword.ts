@@ -6,7 +6,7 @@ import { generatePasswordResetToken } from "@/lib/tokens";
 import {
   resetPasswordSchema,
   ResetPasswordType,
-} from "@/schema/resetPasswordSchema";
+} from "@/schema/resetPassword.schema";
 
 export async function resetPassword(values: ResetPasswordType) {
   const validatedFields = resetPasswordSchema.safeParse(values);

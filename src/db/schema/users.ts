@@ -22,3 +22,5 @@ export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
   twoFactorAuth: many(twoFactorAuth),
 }));
+
+export type Users = typeof users.$inferSelect;

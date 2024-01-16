@@ -7,6 +7,7 @@
 - Forgat password with email
 - Logout
 - Authentication withOAuth Provider (Social login with Google & GitHub)
+- 2FA
 
 ## Tools
 
@@ -17,3 +18,8 @@
 - Tailwind CSS
 - Shadcn
 - resend
+
+## Bonus
+
+- Dashboard
+- Settings

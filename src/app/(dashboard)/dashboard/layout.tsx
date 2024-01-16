@@ -10,7 +10,7 @@ export default function DashboardLayout({
       <div className="fixed inset-y-0 z-30 hidden h-full w-52 flex-col bg-slate-50 pt-14 md:flex dark:bg-[#1F1F1F]">
         <SideBar />
       </div>
-      <div className="h-full md:pl-52">{children}</div>
+      <div className="h-full pb-3 md:pl-52">{children}</div>
     </main>
   );
 }

@@ -2,7 +2,7 @@
 
 import bcrypt from "bcryptjs";
 
-import { registerSchema, RegisterSchemaType } from "@/schema/registerSchema";
+import { registerSchema, RegisterSchemaType } from "@/schema/register.schema";
 import { db } from "@/db";
 import { users } from "@/db/schema/users";
 import { getUserByEmail } from "@/lib/data";

@@ -7,7 +7,7 @@ import { getPasswordResetTokenByToken } from "@/lib/passwordResetToken";
 import {
   newPasswordSchema,
   NewPasswordSchemaType,
-} from "@/schema/newPasswordSchema";
+} from "@/schema/newPassword.schema";
 import { db } from "@/db";
 import { users } from "@/db/schema/users";
 import { eq } from "drizzle-orm";

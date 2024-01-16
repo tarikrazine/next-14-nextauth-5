@@ -11,11 +11,12 @@ import bcrypt from "bcryptjs";
 import { db } from "@/db";
 import { users } from "@/db/schema/users";
 
-import { loginSchema } from "@/schema/loginSchema";
+import { loginSchema } from "@/schema/login.schema";
 import { getUserByEmail, getUserById } from "./data";
 import { env } from "@/env.mjs";
 import { getTwoFactorAuthConfirmationById } from "./twoFactorAuthConfirmation";
 import { twoFactorAuth } from "@/db/schema/twoFactorAuth";
+import { getAccountByUserId } from "./account";
 
 export const { handlers: { GET, POST }, auth, signIn, signOut } = NextAuth({
   pages: {
@@ -62,8 +63,13 @@ export const { handlers: { GET, POST }, auth, signIn, signOut } = NextAuth({
 
       if (!existingUser) return token;
 
+      const existingAccount = await getAccountByUserId(existingUser.id);
+
+      token.name = existingUser.name;
+      token.email = existingUser.email;
       token.role = existingUser.role;
       token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
+      token.isOauth = !!existingAccount;
 
       return token;
     },
@@ -77,7 +83,10 @@ export const { handlers: { GET, POST }, auth, signIn, signOut } = NextAuth({
       }
 
       if (session.user) {
+        session.user.name = token.name;
+        session.user.email = token.email;
         session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
+        session.user.isOauth = token.isOauth as boolean;
       }
 
       return session;

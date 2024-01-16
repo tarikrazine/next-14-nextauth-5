@@ -35,7 +35,7 @@ function Sidebar() {
   ];
 
   return (
-    <div className="flex h-full flex-col p-2.5 pt-5">
+    <div className="flex h-full flex-col px-2.5 pb-3 pt-5">
       <div className="flex flex-1 flex-col space-y-2">
         {routes.map((route) => (
           <Button

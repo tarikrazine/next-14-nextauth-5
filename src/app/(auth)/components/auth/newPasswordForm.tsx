@@ -25,7 +25,7 @@ import { Button } from "@/components/ui/button";
 import {
   NewPasswordSchemaType,
   newPasswordSchema,
-} from "@/schema/newPasswordSchema";
+} from "@/schema/newPassword.schema";
 import { newPassword } from "@/actions/newPassword";
 
 function NewPasswordForm() {

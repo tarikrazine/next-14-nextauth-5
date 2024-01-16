@@ -24,7 +24,7 @@ import FormSuccess from "@/components/formSuccess";
 import {
   resetPasswordSchema,
   ResetPasswordType,
-} from "@/schema/resetPasswordSchema";
+} from "@/schema/resetPassword.schema";
 import { resetPassword } from "@/actions/resetPassword";
 
 function ForgotPassword() {

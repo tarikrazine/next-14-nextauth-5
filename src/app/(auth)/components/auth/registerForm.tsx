@@ -20,7 +20,7 @@ import { Input } from "@/components/ui/input";
 import CardWrapper from "@/app/(auth)/components/auth/cardWrapper";
 import { Button } from "@/components/ui/button";
 
-import { RegisterSchemaType, registerSchema } from "@/schema/registerSchema";
+import { RegisterSchemaType, registerSchema } from "@/schema/register.schema";
 
 import FormError from "@/components/formError";
 import FormSuccess from "@/components/formSuccess";

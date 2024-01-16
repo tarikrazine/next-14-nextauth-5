@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm";
 
 import { signIn } from "@/lib/auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/lib/routes";
-import { loginSchema, LoginSchemaType } from "@/schema/loginSchema";
+import { loginSchema, LoginSchemaType } from "@/schema/login.schema";
 import { db } from "@/db";
 import {
   generateTwoFactorAuthToken,
