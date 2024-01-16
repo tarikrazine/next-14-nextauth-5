@@ -7,12 +7,10 @@ export default function DashboardLayout({
 }) {
   return (
     <main className="h-full">
-      <div className="flex h-full gap-x-4">
-        <div className="w-50 hidden shrink-0 md:block">
-          <SideBar />
-        </div>
-        <div className="w-full">{children}</div>
+      <div className="fixed inset-y-0 z-30 hidden h-full w-52 flex-col bg-slate-50 pt-14 md:flex dark:bg-[#1F1F1F]">
+        <SideBar />
       </div>
+      <div className="h-full md:pl-52">{children}</div>
     </main>
   );
 }
