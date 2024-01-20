@@ -2,6 +2,9 @@
 
 import { useRouter } from "next/navigation";
 
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import LoginForm from "./loginForm";
+
 interface LoginButtonProps {
   children: React.ReactNode;
   mode?: "redirect" | "modal";
@@ -16,7 +19,14 @@ function LoginButton(props: LoginButtonProps) {
   }
 
   if (props.mode === "modal") {
-    return <div>TODO: login button with mode {props.mode}</div>;
+    return (
+      <Dialog>
+        <DialogTrigger asChild={props.asChild}>{props.children}</DialogTrigger>
+        <DialogContent className="w-auto border-none p-0">
+          <LoginForm />
+        </DialogContent>
+      </Dialog>
+    );
   }
 
   return (

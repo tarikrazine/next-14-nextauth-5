@@ -17,7 +17,7 @@ export default function Home() {
         >
           Full authentication system for Next.js
         </h1>
-        <LoginButton>
+        <LoginButton mode="modal" asChild>
           <Button variant="link" size="lg" className="px-0 hover:no-underline">
             <LogIn className="mr-2 h-6 w-6" />
             Sign in
