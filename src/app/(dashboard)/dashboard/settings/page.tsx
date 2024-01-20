@@ -3,7 +3,6 @@ import { Loader } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import FormSettings from "./components/formSettings";
 import { auth } from "@/lib/auth";
-import { getUserById } from "@/lib/data";
 
 export default async function SettingsPage() {
   const user = await auth();

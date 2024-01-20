@@ -33,7 +33,7 @@ import { Switch } from "@/components/ui/switch";
 function FormSettings() {
   const [isPending, startTransition] = useTransition();
 
-  const { update, data: userAuth } = useSession();
+  const { update: updateSession, data: userAuth } = useSession();
 
   const form = useForm<SettingsSchemaType>({
     resolver: zodResolver(settingsSchema),
@@ -55,8 +55,10 @@ function FormSettings() {
             toast.error(data.error);
           }
 
-          toast.success(data.success);
-          update();
+          if (data.success) {
+            toast.success(data.success);
+            updateSession();
+          }
         })
         .catch(() => toast.error("Something went wrong"));
     });
