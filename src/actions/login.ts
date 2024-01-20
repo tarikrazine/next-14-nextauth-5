@@ -18,7 +18,7 @@ import { twoFactorAuth } from "@/db/schema/twoFactorAuth";
 import { twoFactorToken } from "@/db/schema/twoFactorToken";
 import { getTwoFactorAuthConfirmationById } from "@/lib/twoFactorAuthConfirmation";
 
-export async function login(values: LoginSchemaType) {
+export async function login(values: LoginSchemaType, callbackUrl?: string) {
   const validatedFields = loginSchema.safeParse(values);
 
   if (!validatedFields.success) {
@@ -105,7 +105,7 @@ export async function login(values: LoginSchemaType) {
     await signIn("credentials", {
       email,
       password,
-      redirectTo: DEFAULT_LOGIN_REDIRECT,
+      redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
     });
   } catch (error) {
     if (error instanceof AuthError) {

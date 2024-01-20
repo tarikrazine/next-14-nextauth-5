@@ -34,8 +34,16 @@ export default auth(async (request) => {
   }
 
   if (!isLoggedIn && !isPublicRoute) {
+    let callbackUrl = nextUrl.pathname;
+
+    if (nextUrl.search) {
+      callbackUrl += nextUrl.search;
+    }
+
+    const encodedCallbackUrl = encodeURIComponent(callbackUrl);
+
     return NextResponse.redirect(
-      new URL("/login", nextUrl),
+      new URL(`/login?callbackUrl=${encodedCallbackUrl}`, nextUrl),
     );
   }
 

@@ -32,6 +32,8 @@ function LoginPage() {
 
   const searchParams = useSearchParams();
 
+  const callbackUrl = searchParams.get("callbackUrl") as string;
+
   const urlError =
     searchParams.get("error") === "OAuthAccountNotLinked"
       ? "Email not linked to account"
@@ -54,7 +56,7 @@ function LoginPage() {
     setError("");
 
     startTransition(() => {
-      login(values)
+      login(values, callbackUrl)
         .then((data) => {
           if (data?.error) {
             form.reset();
