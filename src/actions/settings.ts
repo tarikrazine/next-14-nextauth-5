@@ -1,5 +1,7 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+
 import { eq } from "drizzle-orm";
 
 import { db } from "@/db";
@@ -7,7 +9,6 @@ import { users } from "@/db/schema/users";
 import { auth } from "@/lib/auth";
 import { getUserByEmail } from "@/lib/data";
 import { SettingsSchemaType } from "@/schema/settings.schema";
-import { revalidatePath } from "next/cache";
 
 export async function settings(values: SettingsSchemaType) {
   const user = await auth();
@@ -24,9 +25,24 @@ export async function settings(values: SettingsSchemaType) {
     return { error: "User not found" };
   }
 
-  await db.update(users).set({ ...values }).where(eq(users.id, userDB.id));
+  if (user?.user?.isOauth) {
+    values.email = undefined;
+    values.password = undefined;
+    values.newPassword = undefined;
+    values.isTwoFactorEnabled = undefined;
+  }
 
-  revalidatePath("/dashboard/settings");
+  if (values.email && values.email !== user?.user?.email) {
+    const userByEmail = await getUserByEmail(values.email);
+
+    if (userByEmail && userByEmail.id !== user?.user?.id) {
+      return {
+        error: "Email already in use",
+      };
+    }
+  }
+
+  await db.update(users).set({ ...values }).where(eq(users.id, userDB.id));
 
   return {
     success: "Settings updated",

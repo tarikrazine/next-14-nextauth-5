@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useTransition } from "react";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,7 +21,6 @@ import {
 import { settings } from "@/actions/settings";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Users } from "@/db/schema/users";
 import {
   Select,
   SelectContent,
@@ -31,24 +30,20 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 
-interface FormSettinsgProps {
-  user: Users;
-}
-
-function FormSettings(props: FormSettinsgProps) {
+function FormSettings() {
   const [isPending, startTransition] = useTransition();
 
-  const { update } = useSession();
+  const { update, data: userAuth } = useSession();
 
   const form = useForm<SettingsSchemaType>({
     resolver: zodResolver(settingsSchema),
     defaultValues: {
-      name: "",
-      email: "",
+      name: undefined,
+      email: undefined,
       password: undefined,
       newPassword: undefined,
-      role: "USER",
-      isTwoFactorEnabled: false,
+      role: undefined,
+      isTwoFactorEnabled: undefined,
     },
   });
 
@@ -68,14 +63,20 @@ function FormSettings(props: FormSettinsgProps) {
   }
 
   useEffect(() => {
-    form.setValue("name", props?.user?.name as string);
-    form.setValue("email", props?.user?.email as string);
-    form.setValue("role", props?.user?.role as "ADMIN" | "USER");
-    form.setValue(
-      "isTwoFactorEnabled",
-      props?.user?.isTwoFactorEnabled as boolean,
-    );
-  }, [form, props.user]);
+    const timeout = setTimeout(() => {
+      form.setValue("name", userAuth?.user?.name as string);
+      form.setValue("email", userAuth?.user?.email as string);
+      form.setValue("role", userAuth?.user?.role as "ADMIN" | "USER");
+      form.setValue(
+        "isTwoFactorEnabled",
+        userAuth?.user?.isTwoFactorEnabled as boolean,
+      );
+    });
+
+    () => {
+      clearTimeout(timeout);
+    };
+  }, [form, userAuth]);
 
   return (
     <Form {...form}>
@@ -97,91 +98,103 @@ function FormSettings(props: FormSettinsgProps) {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input type="email" disabled={isPending} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input type="password" disabled={isPending} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="newPassword"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>New password</FormLabel>
-                <FormControl>
-                  <Input type="password" disabled={isPending} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="role"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Role</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  disabled={isPending}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a role" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="ADMIN">Admin</SelectItem>
-                    <SelectItem value="USER">User</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="isTwoFactorEnabled"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                <div className="space-y-0.5">
-                  <FormLabel>Two factor authentication</FormLabel>
-                  <FormDescription>
-                    Enable two factor authentication to secure your account.
-                  </FormDescription>
-                </div>
-                <FormControl>
-                  <Switch
-                    checked={field.value}
-                    disabled={isPending}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
+          {!userAuth?.user?.isOauth ? (
+            <>
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input type="email" disabled={isPending} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input type="password" disabled={isPending} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="newPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>New password</FormLabel>
+                    <FormControl>
+                      <Input type="password" disabled={isPending} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="isTwoFactorEnabled"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                    <div className="space-y-0.5">
+                      <FormLabel>Two factor authentication</FormLabel>
+                      <FormDescription>
+                        Enable two factor authentication to secure your account.
+                      </FormDescription>
+                    </div>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        disabled={isPending}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </>
+          ) : null}
+          {userAuth?.user?.role === "ADMIN" ? (
+            <>
+              <FormField
+                control={form.control}
+                name="role"
+                render={({ field }) => {
+                  console.log("field role", field.value);
+                  return (
+                    <FormItem>
+                      <FormLabel>Role</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        value={field.value}
+                        disabled={isPending}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a role" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="ADMIN">Admin</SelectItem>
+                          <SelectItem value="USER">User</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
+            </>
+          ) : null}
         </div>
         <Button
           type="submit"
