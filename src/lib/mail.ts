@@ -6,6 +6,8 @@ import { env } from "@/env.mjs";
 
 const resend = new Resend(env.RESEND_API_KEY);
 
+const domain = env.NEXT_PUBLIC_APP_URL;
+
 export async function sendTwoFactorAuthTokenEmail(
   { name, email, token }: {
     name: string;
@@ -34,7 +36,7 @@ export async function sendPasswordResetEmail(
     token: string;
   },
 ) {
-  const confirmLink = `http://localhost:3000/new-password?token=${token}`;
+  const confirmLink = `${domain}/new-password?token=${token}`;
 
   try {
     const data = await resend.emails.send({
@@ -57,7 +59,7 @@ export async function sendVerificationEmail(
     token: string;
   },
 ) {
-  const confirmLink = `http://localhost:3000/verify-email?token=${token}`;
+  const confirmLink = `${domain}/verify-email?token=${token}`;
 
   try {
     const data = await resend.emails.send({

@@ -15,6 +15,7 @@ export const env = createEnv({
   },
   client: {
     //NEXT_PUBLIC_PUBLISHABLE_KEY: z.string().min(1),
+    NEXT_PUBLIC_APP_URL: z.string().url(),
   },
   // If you're using Next.js < 13.4.4, you'll need to specify the runtimeEnv manually
   //   runtimeEnv: {
@@ -33,5 +34,6 @@ export const env = createEnv({
     AUTH_GOOGLE_SECRET: process.env.AUTH_GOOGLE_SECRET,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     //NEXT_PUBLIC_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_PUBLISHABLE_KEY,
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
   },
 });
