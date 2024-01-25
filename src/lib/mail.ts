@@ -18,7 +18,7 @@ export async function sendTwoFactorAuthTokenEmail(
   try {
     const data = await resend.emails.send({
       from: "AuthNext <onboarding@resend.dev>",
-      to: ["ra.devweb.io@gmail.com"],
+      to: [email],
       subject: "2FA code",
       react: EmailTemplate({ name, token }),
     });
@@ -41,7 +41,7 @@ export async function sendPasswordResetEmail(
   try {
     const data = await resend.emails.send({
       from: "AuthNext <onboarding@resend.dev>",
-      to: ["ra.devweb.io@gmail.com"],
+      to: [email],
       subject: "Reset your password",
       react: EmailTemplate({ name, confirmLink }),
     });
@@ -64,7 +64,7 @@ export async function sendVerificationEmail(
   try {
     const data = await resend.emails.send({
       from: "AuthNext <onboarding@resend.dev>",
-      to: ["ra.devweb.io@gmail.com"],
+      to: [email],
       subject: "Confirm your email",
       react: EmailTemplate({ name, confirmLink }),
     });
